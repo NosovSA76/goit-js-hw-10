@@ -8,7 +8,6 @@ const DEBOUNCE_DELAY = 300;
 const countriesList = document.querySelector('.country-list');
 const countryInfo = document.querySelector('.country-info');
 const searchBox = document.querySelector('#search-box');
-const body = document.querySelector('body');
 
 
 countriesList.style.display = 'none';
@@ -105,7 +104,7 @@ function countryButton() {
     countryButton.addEventListener('click', () => {
       // const countryOffitialName = document.querySelector('.official-name');
       const buttonText = countryButton.textContent.trim();
-      value = buttonText;
+      const value = buttonText;
       searchBox.value = value
       fetchCountries(value)
         .then(data => {
