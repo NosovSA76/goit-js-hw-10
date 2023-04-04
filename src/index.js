@@ -9,7 +9,6 @@ const countriesList = document.querySelector('.country-list');
 const countryInfo = document.querySelector('.country-info');
 const searchBox = document.querySelector('#search-box');
 
-
 countriesList.style.display = 'none';
 countryInfo.style.display = 'none';
 
@@ -41,28 +40,34 @@ function onInputSearch(e) {
     });
 }
 
-const generateMarkupCountryInfo = data =>
-  data.reduce(
-    (acc, { flags: { svg }, name, capital, population, languages }) => {
-      console.log(languages);
+const generateMarkupCountryInfo = data => {
+  let count = 0;
+  return data.reduce(
+    (same, { flags: { svg }, name, capital, population, languages }) => {
+      count++;
       languages = Object.values(languages).join(', ');
-      console.log(name);
       return (
-        acc +
-        ` <img src="${svg}" alt="${name}" width="320" height="auto">
-            <p> ${name.official}</p>
-            <p>Capital: <span> ${capital}</span></p>
-            <p>Population: <span> ${population}</span></p>
-            <p>Languages: <span> ${languages}</span></p>`
+        same +
+        `<div class="country-card" style="display: ${
+          count === 1 ? "block" : "none"
+        };">
+          <img src="${svg}" alt="${name}" width="320" height="auto">
+          <p>${name.official}</p>
+          <p>Capital: <span>${capital}</span></p>
+          <p>Population: <span>${population}</span></p>
+          <p>Languages: <span>${languages}</span></p>
+        </div>`
       );
     },
-    ''
+    ""
   );
+};
 
 const generateMarkupCountryList = data =>
-  data.reduce((acc, { name: { official, common }, flags: { svg } }) => {
+  data.reduce((same, { name: { official, common }, flags: { svg } }) => {
+    console.log(same)
     return (
-      acc +
+      same +
       `<li>
       <button class="country-button">
         <img class="countrys-flag" src="${svg}" alt="${common}" width="70">
@@ -98,23 +103,24 @@ function addHidden() {
   countryInfo.style.display = 'none';
 }
 
+
+// бажано залишити лише виклик функції якій передати окреме значення
+
 function countryButton() {
   const countryButtons = document.querySelectorAll('.country-button');
   countryButtons.forEach(countryButton => {
     countryButton.addEventListener('click', () => {
-      // const countryOffitialName = document.querySelector('.official-name');
       const buttonText = countryButton.textContent.trim();
-      const value = buttonText;
-      searchBox.value = value
-      fetchCountries(value)
+      searchBox.value = buttonText
+
+      // Зайвий код??
+      fetchCountries(buttonText)
         .then(data => {
           countryInfo.style.display = 'block';
           countriesList.style.display = 'none';
           countryInfo.innerHTML = generateMarkupCountryInfo(data);
-        })
-        .catch(err => {
-          Notify.failure('Oops, something went wrong');
         });
+      // чи можна скоротити??
     });
   })
 }
