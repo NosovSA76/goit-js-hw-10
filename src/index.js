@@ -42,8 +42,11 @@ function addHidden() {
     .then(data => {
       coumtryList = data
       if (data.length > 10) {
+        countriesList.style.display = 'none';
+        countryInfo.style.display = 'none';
         Notify.info(
           'Too many matches found. Please enter a more specific name.'
+
         );
       }
       renderCountries(data);
